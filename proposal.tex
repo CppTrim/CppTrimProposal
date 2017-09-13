@@ -1,0 +1,88 @@
+\documentclass[10pt,a4paper,article]{memoir}
+
+\usepackage{geometry}
+\geometry{a4paper}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{underscore}
+\usepackage{enumitem}
+\usepackage[T1]{fontenc}
+\usepackage{listings}
+\pagestyle{myheadings}
+\markboth{DXXXX}{DXXXX}
+
+\title{Trimming strings}
+\author{Russel Winder, Anthony Williams, Emyr Williams}
+
+\date{\today}
+
+\input{macros}
+\setsecnumdepth{subsection}
+
+\begin{document}
+
+\maketitle
+
+\begin{tabularx}{\textwidth}{|l|X|}
+  \hline 
+  Document Number: &  DXXXX\\
+  \hline
+Date: & \today \\
+\hline
+Project: & Programming Language C++\\
+\hline
+  Reply To: & Russel Winder\\
+  & Anthony Williams\hfill \href{mailto:anthony@justsoftwaresolutions.co.uk}{<anthony@justsoftwaresolutions.co.uk>}\\
+  & Emyr Williams\\
+\hline
+\end{tabularx}
+
+\tableofcontents
+
+\chapter{Introduction}
+\label{sec:introduction}
+
+This proposal provides facilities to trim leading and trailing whitespace from
+strings. Whitespace can be trimmed from the left or right of the string, either
+in-place, or by returning a new string which is a copy of the original, but
+trimmed. The set of whitespace characters can either be implicit, or specified
+as those defined by a locale, those from a specific list, or with a custom
+predicate to identify whitespace.
+
+The ``strings'' are not limited to \texttt{std::string}: any container of
+characters can be used.
+
+\chapter{Motivation}
+\label{sec:motivation}
+
+Removing whitespace from strings is a common facility in many programming
+languages, and the its omission from C++ is frustrating, leading to many
+disparate implementations. Boost had provided string trimming functions for a
+number of years, and these are widely used.
+
+\chapter{Impact on the Standard}
+\label{sec:impact}
+
+A few new function templates are added.
+
+\chapter{Design Decisions}
+\label{sec:design}
+
+\chapter{Technical Specifications}
+\label{sec:spec}
+
+\chapter{Acknowledgements}
+\label{sec:acknowledgements}
+
+\chapter{References}
+\label{sec:references}
+
+\begin{itemize}
+\item Boost string trim: \url{http://www.boost.org/doc/libs/1_64_0/doc/html/string_algo/reference.html#header.boost.algorithm.string.trim_hpp}
+\end{itemize}
+
+\end{document}
+
+% Local Variables:
+% fill-column: 80
+% End:
