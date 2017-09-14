@@ -1,6 +1,13 @@
 *.aux
-*.pdf
+*.bbl
+*.bcf
+*.blg
+*.fls
 *.log
+*.pdf
 *.out
+*.run.xml
 *.toc
 string_trim_tests
+string_trim_tests.o
+.sconsign.dblite
