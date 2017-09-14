@@ -50,6 +50,16 @@ void trim_left(Container& s,CharacterList&& space_chars){
     s.erase(s.begin(),find_first_non_whitespace(s.begin(),s.end(),space_chars));
 }
 
+template <typename Container>
+void trim_left(
+    Container &s, typename Container::value_type const *space_chars) {
+    s.erase(
+        s.begin(), find_first_non_whitespace(
+                       s.begin(), s.end(),
+                       std::basic_string_view<typename Container::value_type>(
+                           space_chars)));
+}
+
 template<typename Container>
 std::remove_reference_t<Container> trim_copy_left(Container&& s){
     using string_type=std::remove_reference_t<Container>;
