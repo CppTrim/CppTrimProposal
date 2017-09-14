@@ -53,11 +53,14 @@ void trim_left(Container& s,CharacterList&& space_chars){
 template <typename Container>
 void trim_left(
     Container &s, typename Container::value_type const *space_chars) {
-    s.erase(
-        s.begin(), find_first_non_whitespace(
-                       s.begin(), s.end(),
-                       std::basic_string_view<typename Container::value_type>(
-                           space_chars)));
+    trim_left(
+        s, std::basic_string_view<typename Container::value_type>(space_chars));
+}
+
+template <typename Container>
+void trim_left(Container &s, typename Container::value_type *space_chars) {
+    trim_left(
+        s, std::basic_string_view<typename Container::value_type>(space_chars));
 }
 
 template<typename Container>
