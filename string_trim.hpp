@@ -58,6 +58,20 @@ find_last_non_whitespace(Iterator begin,Iterator end){
     return endpos.base();
 }
 
+template <typename Iterator, typename CharacterList>
+Iterator find_last_non_whitespace(
+    Iterator begin, Iterator end, CharacterList &&space_chars) {
+    auto endpos= std::make_reverse_iterator(end);
+    auto begin_of_chars= std::begin(space_chars);
+    auto end_of_chars= std::end(space_chars);
+    for(auto start= std::make_reverse_iterator(begin);
+        (endpos != start) &&
+        (std::find(begin_of_chars, end_of_chars, *endpos) != end_of_chars);
+        ++endpos)
+        ;
+    return endpos.base();
+}
+
 template<typename Container>
 void trim_left(Container& s){
     s.erase(s.begin(),find_first_non_whitespace(s.begin(),s.end()));
@@ -89,6 +103,24 @@ void trim_left(
 template <typename Container>
 void trim_left(Container &s, typename Container::value_type *space_chars) {
     trim_left(
+        s, std::basic_string_view<typename Container::value_type>(space_chars));
+}
+
+template<typename Container,typename CharacterList>
+void trim_right(Container& s,CharacterList&& space_chars){
+    s.erase(find_last_non_whitespace(s.begin(),s.end(),space_chars),s.end());
+}
+
+template <typename Container>
+void trim_right(
+    Container &s, typename Container::value_type const *space_chars) {
+    trim_right(
+        s, std::basic_string_view<typename Container::value_type>(space_chars));
+}
+
+template <typename Container>
+void trim_right(Container &s, typename Container::value_type *space_chars) {
+    trim_right(
         s, std::basic_string_view<typename Container::value_type>(space_chars));
 }
 
