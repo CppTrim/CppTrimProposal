@@ -2,9 +2,11 @@
 *.bbl
 *.bcf
 *.blg
+*.fls
 *.log
 *.pdf
 *.out
 *.run.xml
 *.toc
 string_trim_tests
+.sconsign.dblite
