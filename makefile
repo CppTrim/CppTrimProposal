@@ -15,7 +15,7 @@ string_trim_tests: $(TEST_ROOT).cpp $(TESTROOT).hpp makefile
 
 doc: $(DOCROOT).pdf makefile
 
-$(DOCROOT).pdf: $(DOCROOT).tex
+$(DOCROOT).pdf: $(DOCROOT).ltx
 	xelatex $<
 	biber $(DOCROOT)
 	xelatex $<

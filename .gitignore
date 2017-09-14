@@ -1,6 +1,10 @@
 *.aux
-*.pdf
+*.bbl
+*.bcf
+*.blg
 *.log
+*.pdf
 *.out
+*.run.xml
 *.toc
 string_trim_tests
