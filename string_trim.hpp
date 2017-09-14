@@ -5,10 +5,25 @@
 #include <iterator>
 #include <algorithm>
 
-template<typename Iterator>
-Iterator find_first_non_whitespace(Iterator begin,Iterator end){
-    auto pos=begin;
-    for(;(pos!=end) && std::isspace(*pos);++pos);
+template <typename Iterator>
+typename std::enable_if<
+    std::is_same_v<char, std::remove_cv_t<typename std::iterator_traits<Iterator>::value_type> >,
+    Iterator>::type
+find_first_non_whitespace(Iterator begin, Iterator end) {
+    auto pos= begin;
+    for(; (pos != end) && std::isspace(*pos); ++pos)
+        ;
+    return pos;
+}
+
+template <typename Iterator>
+typename std::enable_if<
+    std::is_same_v<wchar_t, std::remove_cv_t<typename std::iterator_traits<Iterator>::value_type> >,
+    Iterator>::type
+find_first_non_whitespace(Iterator begin, Iterator end) {
+    auto pos= begin;
+    for(; (pos != end) && std::iswspace(*pos); ++pos)
+        ;
     return pos;
 }
 
@@ -22,10 +37,24 @@ Iterator find_first_non_whitespace(Iterator begin,Iterator end,CharacterList&& s
 }
 
 template<typename Iterator>
-Iterator find_last_non_whitespace(Iterator begin,Iterator end){
+typename std::enable_if<
+    std::is_same_v<char, std::remove_cv_t<typename std::iterator_traits<Iterator>::value_type> >,
+    Iterator>::type
+find_last_non_whitespace(Iterator begin,Iterator end){
     auto endpos= std::make_reverse_iterator(end);
     for(auto start= std::make_reverse_iterator(begin);
         (endpos != start) && std::isspace(*endpos); ++endpos);
+    return endpos.base();
+}
+
+template<typename Iterator>
+typename std::enable_if<
+    std::is_same_v<wchar_t, std::remove_cv_t<typename std::iterator_traits<Iterator>::value_type> >,
+    Iterator>::type
+find_last_non_whitespace(Iterator begin,Iterator end){
+    auto endpos= std::make_reverse_iterator(end);
+    for(auto start= std::make_reverse_iterator(begin);
+        (endpos != start) && std::iswspace(*endpos); ++endpos);
     return endpos.base();
 }
 
