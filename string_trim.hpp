@@ -3,11 +3,21 @@
 #include <cctype>
 #include <type_traits>
 #include <iterator>
+#include <algorithm>
 
 template<typename Iterator>
 Iterator find_first_non_whitespace(Iterator begin,Iterator end){
     auto pos=begin;
     for(;(pos!=end) && std::isspace(*pos);++pos);
+    return pos;
+}
+
+template<typename Iterator,typename CharacterList>
+Iterator find_first_non_whitespace(Iterator begin,Iterator end,CharacterList&& space_chars){
+    auto pos=begin;
+    auto begin_of_chars=std::begin(space_chars);
+    auto end_of_chars=std::end(space_chars);
+    for(;(pos!=end) && (std::find(begin_of_chars,end_of_chars,*pos)!=end_of_chars);++pos);
     return pos;
 }
 
@@ -33,6 +43,11 @@ template<typename Container>
 void trim(Container& s){
     trim_left(s);
     trim_right(s);
+}
+
+template<typename Container,typename CharacterList>
+void trim_left(Container& s,CharacterList&& space_chars){
+    s.erase(s.begin(),find_first_non_whitespace(s.begin(),s.end(),space_chars));
 }
 
 template<typename Container>

@@ -280,6 +280,14 @@ void trim_vector_copy_spaces_from_right_only(){
     assert(s==orig);
 }
 
+void trim_left_with_specified_characters(){
+    std::string const hello="hello";
+    std::string const orig="aaabbabab"+hello;
+    auto s=orig;
+    trim_left(s,"ab");
+    assert(s==hello);
+}
+
 int main(){
     trim_empty_string_does_nothing();
     trim_non_space_string_does_nothing();
@@ -314,4 +322,5 @@ int main(){
     trim_vector_copy_spaces_from_both_ends();
     trim_vector_copy_spaces_from_left_only();
     trim_vector_copy_spaces_from_right_only();
+    trim_left_with_specified_characters();
 }
