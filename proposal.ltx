@@ -1,0 +1,98 @@
+\documentclass[10pt,a4paper,article]{memoir}
+
+\newcommand\documentnumber{DXXXX}
+
+\usepackage{geometry}
+\geometry{a4paper}
+\usepackage{fontspec}
+\usepackage{hyperref}
+%\usepackage{xcolor}
+%\usepackage{underscore}
+%\usepackage{enumitem}
+\usepackage{listings}
+\usepackage[yyyymmdd]{datetime}
+\renewcommand\dateseparator{-}
+\usepackage{biblatex}
+\addbibresource{proposal.bib}
+\pagestyle{myheadings}
+\markboth{\documentnumber}{\documentnumber}
+
+\title{Trimming strings}
+\author{Russel Winder, Anthony Williams, Emyr Williams}
+\date{}
+
+\setsecnumdepth{subsection}
+
+\setmainfont{Liberation Serif}
+\setsansfont{Liberation Sans}
+\setmonofont{Liberation Mono}
+
+\begin{document}
+
+\maketitle
+
+\begin{tabularx}{\textwidth}{|l|X|}
+  \hline
+  Document Number: &  \documentnumber\\
+  \hline
+  Date: & \today \\
+  \hline
+  Project: & Programming Language C++\\
+  \hline
+  Reply To: & Russel Winder\hfill \href{mailto:russel@winder.org.uk}{<russel@winder.org.uk>}\\
+                   & Anthony Williams\hfill \href{mailto:anthony@justsoftwaresolutions.co.uk}{<anthony@justsoftwaresolutions.co.uk>}\\
+                   & Emyr Williams\\
+  \hline
+\end{tabularx}
+
+\tableofcontents
+
+\chapter{Introduction}
+\label{sec:introduction}
+
+This proposal presents facilities to trim leading and trailing characters
+(whitespace usually and by default) from strings. Characters can be trimmed
+from the left or right of the string, either in-place, or by returning a new
+string which is a copy of the original, but trimmed. The set of characters can
+either be implicit (using \texttt{std::isspace}), or specified as those defined by a
+locale, those from a specific list, or with a custom predicate to identify
+whitespace.
+
+The ``strings'' are not limited to \texttt{std::string}: any container of
+characters can be used.
+
+\chapter{Motivation}
+\label{sec:motivation}
+
+Removing whitespace from strings is a common requirement in code and facility in
+many programming languages. The omission of this from C++ is surprising and
+frustrating, leading to many disparate implementations. Boost has provided
+string trimming functions for a number of years, and these are widely
+used. However the Boost functions have not migrated into the standard library.
+
+This proposal is a new implementation for the C++17 standard inspired by the
+Boost implementation\cite{BoostTrim}, and also facilities in Rust and Python,
+but is an design and implementation from scratch.
+
+\chapter{Impact on the Standard}
+\label{sec:impact}
+
+Some new function templates are added.
+
+\chapter{Design Decisions}
+\label{sec:design}
+
+\chapter{Technical Specifications}
+\label{sec:spec}
+
+\chapter{Acknowledgements}
+\label{sec:acknowledgements}
+
+\label{sec:references}
+\printbibliography
+
+\end{document}
+
+% Local Variables:
+% fill-column: 80
+% End:
