@@ -5,13 +5,14 @@ CXXFLAGS=-std=c++1z -g
 
 TESTROOT=string_trim_tests
 DOCROOT=proposal
+HEADER=string_trim.hpp
 
 all: test doc
 
 test: $(TESTROOT)
 	./$(TESTROOT)
 
-string_trim_tests: $(TEST_ROOT).cpp $(TESTROOT).hpp makefile
+$(TESTROOT): $(TESTROOT).cpp $(HEADER) makefile
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ $<
 
 doc: $(DOCROOT).pdf makefile
