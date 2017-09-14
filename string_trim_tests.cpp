@@ -314,6 +314,14 @@ void trim_spaces_and_tabs_from_both_ends_wide_chars(){
     assert(s==hello);
 }
 
+void trim_left_with_specified_characters_via_string(){
+    std::string const hello="hello";
+    std::string const orig="aaabbabab"+hello;
+    auto s=orig;
+    std::string const space_chars="ab";
+    trim_left(s,space_chars);
+    assert(s==hello);
+}
 
 int main(){
     trim_empty_string_does_nothing();
@@ -352,5 +360,6 @@ int main(){
     trim_left_with_specified_characters();
     trim_left_with_specified_characters_via_char_pointer();
     trim_left_with_specified_characters_via_non_const_char_pointer();
+    trim_left_with_specified_characters_via_string();
     trim_spaces_and_tabs_from_both_ends_wide_chars();
 }
