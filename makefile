@@ -1,6 +1,7 @@
 .PHONY: test
 
-CXXFLAGS=-std=c++1z
+CXX=g++-7
+CXXFLAGS=-std=c++1z -g
 
 all: test proposal.pdf
 
