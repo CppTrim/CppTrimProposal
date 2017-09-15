@@ -359,6 +359,225 @@ void trim_right_with_specified_characters_via_string(){
     assert(s==hello);
 }
 
+void trim_left_with_predicate(){
+    std::string const hello="hello";
+    std::string const orig="aaabbabab"+hello;
+    auto s=orig;
+    trim_left(s,[](char c){
+            return c=='a' || c=='b';
+        });
+    assert(s==hello);
+}
+
+void trim_both_with_specified_characters(){
+    std::string const hello="hello";
+    std::string const orig="aaabbbabab"+hello+"aaabbabab";
+    auto s=orig;
+    trim(s,"ab");
+    assert(s==hello);
+}
+
+void trim_both_with_specified_characters_via_char_pointer(){
+    std::string const hello="hello";
+    std::string const orig="aaabbbabab"+hello+"aaabbabab";
+    auto s=orig;
+    char const* space_chars="ab";
+    trim(s,space_chars);
+    assert(s==hello);
+}
+
+void trim_both_with_specified_characters_via_non_const_char_pointer(){
+    std::string const hello="hello";
+    std::string const orig="aaabbbabab"+hello+"aaabbabab";
+    auto s=orig;
+    char space_chars[]="ab";
+    char* space_chars_ptr=space_chars;
+    trim(s,space_chars_ptr);
+    assert(s==hello);
+}
+
+void trim_both_with_specified_characters_via_string(){
+    std::string const hello="hello";
+    std::string const orig="aaabbbabab"+hello+"aaabbabab";
+    auto s=orig;
+    std::string const space_chars="ab";
+    trim(s,space_chars);
+    assert(s==hello);
+}
+
+void trim_right_with_predicate(){
+    std::string const hello="hello";
+    std::string const orig=hello+"aaabbabab";
+    auto s=orig;
+    trim_right(s,[](char c){
+            return c=='a' || c=='b';
+        });
+    assert(s==hello);
+}
+
+void trim_both_with_predicate(){
+    std::string const hello="hello";
+    std::string const orig="aaabbabab"+hello+"aaabbabab";
+    auto s=orig;
+    trim(s,[](char c){
+            return c=='a' || c=='b';
+        });
+    assert(s==hello);
+}
+
+void trim_copy_left_with_specified_characters(){
+    std::string const hello="hello";
+    std::string const orig="aaabbabab"+hello;
+    auto s=orig;
+    auto s2=trim_copy_left(s,"ab");
+    assert(s2==hello);
+    assert(s==orig);
+}
+
+void trim_copy_left_with_specified_characters_via_char_pointer(){
+    std::string const hello="hello";
+    std::string const orig="aaabbabab"+hello;
+    auto s=orig;
+    char const* space_chars="ab";
+    auto s2=trim_copy_left(s,space_chars);
+    assert(s2==hello);
+    assert(s==orig);
+}
+
+void trim_copy_left_with_specified_characters_via_non_const_char_pointer(){
+    std::string const hello="hello";
+    std::string const orig="aaabbabab"+hello;
+    auto s=orig;
+    char space_chars[]="ab";
+    char* space_chars_ptr=space_chars;
+    auto s2=trim_copy_left(s,space_chars_ptr);
+    assert(s2==hello);
+    assert(s==orig);
+}
+
+void trim_copy_left_with_specified_characters_via_string(){
+    std::string const hello="hello";
+    std::string const orig="aaabbabab"+hello;
+    auto s=orig;
+    std::string const space_chars="ab";
+    auto s2=trim_copy_left(s,space_chars);
+    assert(s2==hello);
+    assert(s==orig);
+}
+
+void trim_copy_right_with_specified_characters(){
+    std::string const hello="hello";
+    std::string const orig=hello+"aaabbabab";
+    auto s=orig;
+    auto s2=trim_copy_right(s,"ab");
+    assert(s2==hello);
+    assert(s==orig);
+}
+
+void trim_copy_right_with_specified_characters_via_char_pointer(){
+    std::string const hello="hello";
+    std::string const orig=hello+"aaabbabab";
+    auto s=orig;
+    char const* space_chars="ab";
+    auto s2=trim_copy_right(s,space_chars);
+    assert(s2==hello);
+    assert(s==orig);
+}
+
+void trim_copy_right_with_specified_characters_via_non_const_char_pointer(){
+    std::string const hello="hello";
+    std::string const orig=hello+"aaabbabab";
+    auto s=orig;
+    char space_chars[]="ab";
+    char* space_chars_ptr=space_chars;
+    auto s2=trim_copy_right(s,space_chars_ptr);
+    assert(s2==hello);
+    assert(s==orig);
+}
+
+void trim_copy_right_with_specified_characters_via_string(){
+    std::string const hello="hello";
+    std::string const orig=hello+"aaabbabab";
+    auto s=orig;
+    std::string const space_chars="ab";
+    auto s2=trim_copy_right(s,space_chars);
+    assert(s2==hello);
+    assert(s==orig);
+}
+
+void trim_copy_left_with_predicate(){
+    std::string const hello="hello";
+    std::string const orig="aaabbabab"+hello;
+    auto s=orig;
+    auto s2=trim_copy_left(s,[](char c){
+            return c=='a' || c=='b';
+        });
+    assert(s2==hello);
+    assert(s==orig);
+}
+
+void trim_copy_both_with_specified_characters(){
+    std::string const hello="hello";
+    std::string const orig="aaabbbabab"+hello+"aaabbabab";
+    auto s=orig;
+    auto s2=trim_copy(s,"ab");
+    assert(s2==hello);
+    assert(s==orig);
+}
+
+void trim_copy_both_with_specified_characters_via_char_pointer(){
+    std::string const hello="hello";
+    std::string const orig="aaabbbabab"+hello+"aaabbabab";
+    auto s=orig;
+    char const* space_chars="ab";
+    auto s2=trim_copy(s,space_chars);
+    assert(s2==hello);
+    assert(s==orig);
+}
+
+void trim_copy_both_with_specified_characters_via_non_const_char_pointer(){
+    std::string const hello="hello";
+    std::string const orig="aaabbbabab"+hello+"aaabbabab";
+    auto s=orig;
+    char space_chars[]="ab";
+    char* space_chars_ptr=space_chars;
+    auto s2=trim_copy(s,space_chars_ptr);
+    assert(s2==hello);
+    assert(s==orig);
+}
+
+void trim_copy_both_with_specified_characters_via_string(){
+    std::string const hello="hello";
+    std::string const orig="aaabbbabab"+hello+"aaabbabab";
+    auto s=orig;
+    std::string const space_chars="ab";
+    auto s2=trim_copy(s,space_chars);
+    assert(s2==hello);
+    assert(s==orig);
+}
+
+void trim_copy_right_with_predicate(){
+    std::string const hello="hello";
+    std::string const orig=hello+"aaabbabab";
+    auto s=orig;
+    auto s2=trim_copy_right(s,[](char c){
+            return c=='a' || c=='b';
+        });
+    assert(s2==hello);
+    assert(s==orig);
+}
+
+void trim_copy_both_with_predicate(){
+    std::string const hello="hello";
+    std::string const orig="aaabbabab"+hello+"aaabbabab";
+    auto s=orig;
+    auto s2=trim_copy(s,[](char c){
+            return c=='a' || c=='b';
+        });
+    assert(s2==hello);
+    assert(s==orig);
+}
+
 int main(){
     trim_empty_string_does_nothing();
     trim_non_space_string_does_nothing();
@@ -393,13 +612,35 @@ int main(){
     trim_vector_copy_spaces_from_both_ends();
     trim_vector_copy_spaces_from_left_only();
     trim_vector_copy_spaces_from_right_only();
+    trim_spaces_and_tabs_from_both_ends_wide_chars();
     trim_left_with_specified_characters();
     trim_left_with_specified_characters_via_char_pointer();
     trim_left_with_specified_characters_via_non_const_char_pointer();
     trim_left_with_specified_characters_via_string();
-    trim_spaces_and_tabs_from_both_ends_wide_chars();
     trim_right_with_specified_characters();
     trim_right_with_specified_characters_via_char_pointer();
     trim_right_with_specified_characters_via_non_const_char_pointer();
     trim_right_with_specified_characters_via_string();
+    trim_both_with_specified_characters();
+    trim_both_with_specified_characters_via_char_pointer();
+    trim_both_with_specified_characters_via_non_const_char_pointer();
+    trim_both_with_specified_characters_via_string();
+    trim_left_with_predicate();
+    trim_right_with_predicate();
+    trim_both_with_predicate();
+    trim_copy_left_with_specified_characters();
+    trim_copy_left_with_specified_characters_via_char_pointer();
+    trim_copy_left_with_specified_characters_via_non_const_char_pointer();
+    trim_copy_left_with_specified_characters_via_string();
+    trim_copy_right_with_specified_characters();
+    trim_copy_right_with_specified_characters_via_char_pointer();
+    trim_copy_right_with_specified_characters_via_non_const_char_pointer();
+    trim_copy_right_with_specified_characters_via_string();
+    trim_copy_both_with_specified_characters();
+    trim_copy_both_with_specified_characters_via_char_pointer();
+    trim_copy_both_with_specified_characters_via_non_const_char_pointer();
+    trim_copy_both_with_specified_characters_via_string();
+    trim_copy_left_with_predicate();
+    trim_copy_right_with_predicate();
+    trim_copy_both_with_predicate();
 }
