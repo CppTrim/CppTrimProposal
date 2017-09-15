@@ -1,0 +1,13 @@
+language: cpp
+sudo: true
+dist: trusty
+
+compiler:
+  - gcc
+  - clang
+
+os:
+  - linux
+
+script:
+  - scons test
