@@ -359,6 +359,16 @@ void trim_right_with_specified_characters_via_string(){
     assert(s==hello);
 }
 
+void trim_left_with_predicate(){
+    std::string const hello="hello";
+    std::string const orig="aaabbabab"+hello;
+    auto s=orig;
+    trim_left(s,[](char c){
+            return c=='a' || c=='b';
+        });
+    assert(s==hello);
+}
+
 int main(){
     trim_empty_string_does_nothing();
     trim_non_space_string_does_nothing();
@@ -402,4 +412,5 @@ int main(){
     trim_right_with_specified_characters_via_char_pointer();
     trim_right_with_specified_characters_via_non_const_char_pointer();
     trim_right_with_specified_characters_via_string();
+    trim_left_with_predicate();
 }
