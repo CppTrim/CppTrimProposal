@@ -2,6 +2,7 @@ language: cpp
 sudo: true
 dist: trusty
 
+
 matrix:
   include:
     - os: linux
@@ -49,8 +50,10 @@ matrix:
       env:
         - MATRIX_EVAL="brew install gcc && CC=gcc-6 && CXX=g++-6"
 
+
 before_install:
   - eval "${MATRIX_EVAL}"
+
 
 script:
   - scons test
