@@ -108,7 +108,11 @@ find_last_non_whitespace(Iterator begin, Iterator end) {
 }
 
 template <typename Iterator, typename CharacterList>
-Iterator find_last_non_whitespace(
+typename std::enable_if<
+    !is_whitespace_predicate<
+        CharacterList, typename std::iterator_traits<Iterator>::value_type>,
+    Iterator>::type
+find_last_non_whitespace(
     Iterator begin, Iterator end, CharacterList &&space_chars) {
     auto endpos= std::make_reverse_iterator(end);
     auto begin_of_chars= std::begin(space_chars);
@@ -117,6 +121,20 @@ Iterator find_last_non_whitespace(
         (endpos != start) &&
         (std::find(begin_of_chars, end_of_chars, *endpos) != end_of_chars);
         ++endpos)
+        ;
+    return endpos.base();
+}
+
+template <typename Iterator, typename Predicate>
+typename std::enable_if<
+    is_whitespace_predicate<
+        Predicate, typename std::iterator_traits<Iterator>::value_type>,
+    Iterator>::type
+find_last_non_whitespace(
+    Iterator begin, Iterator end, Predicate &&is_white_space) {
+    auto endpos= std::make_reverse_iterator(end);
+    for(auto start= std::make_reverse_iterator(begin);
+        (endpos != start) && is_white_space(*endpos); ++endpos)
         ;
     return endpos.base();
 }
@@ -134,13 +152,12 @@ template <typename Container> void trim(Container &s) {
     trim_right(s);
 }
 
-template <typename Container, typename CharacterList>
-typename std::enable_if<
-    !is_whitespace_predicate<CharacterList, typename Container::value_type>,
-    void>::type
-trim_left(Container &s, CharacterList &&space_chars) {
+template <typename Container, typename CharacterListOrPredicate>
+void trim_left(
+    Container &s, CharacterListOrPredicate &&space_chars_or_predicate) {
     s.erase(
-        s.begin(), find_first_non_whitespace(s.begin(), s.end(), space_chars));
+        s.begin(), find_first_non_whitespace(
+                       s.begin(), s.end(), space_chars_or_predicate));
 }
 
 template <typename Container>
@@ -156,9 +173,12 @@ void trim_left(Container &s, typename Container::value_type *space_chars) {
         s, std::basic_string_view<typename Container::value_type>(space_chars));
 }
 
-template <typename Container, typename CharacterList>
-void trim_right(Container &s, CharacterList &&space_chars) {
-    s.erase(find_last_non_whitespace(s.begin(), s.end(), space_chars), s.end());
+template <typename Container, typename CharacterListOrPredicate>
+void trim_right(
+    Container &s, CharacterListOrPredicate &&space_chars_or_predicate) {
+    s.erase(
+        find_last_non_whitespace(s.begin(), s.end(), space_chars_or_predicate),
+        s.end());
 }
 
 template <typename Container>
@@ -175,17 +195,13 @@ void trim_right(Container &s, typename Container::value_type *space_chars) {
 }
 
 template <typename Container, typename CharacterList>
-typename std::enable_if<
-    !is_whitespace_predicate<CharacterList, typename Container::value_type>,
-    void>::type
-trim(Container &s, CharacterList &&space_chars) {
-    trim_left(s,space_chars);
-    trim_right(s,space_chars);
+void trim(Container &s, CharacterList &&space_chars) {
+    trim_left(s, space_chars);
+    trim_right(s, space_chars);
 }
 
 template <typename Container>
-void trim(
-    Container &s, typename Container::value_type const *space_chars) {
+void trim(Container &s, typename Container::value_type const *space_chars) {
     trim(
         s, std::basic_string_view<typename Container::value_type>(space_chars));
 }
@@ -194,16 +210,6 @@ template <typename Container>
 void trim(Container &s, typename Container::value_type *space_chars) {
     trim(
         s, std::basic_string_view<typename Container::value_type>(space_chars));
-}
-
-
-template <typename Container, typename Predicate>
-typename std::enable_if<
-    is_whitespace_predicate<Predicate, typename Container::value_type>,
-    void>::type
-trim_left(Container &s, Predicate &&predicate) {
-    s.erase(
-        s.begin(), find_first_non_whitespace(s.begin(), s.end(), predicate));
 }
 
 template <typename Container>
