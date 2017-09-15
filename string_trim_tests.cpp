@@ -459,20 +459,20 @@ int main(){
     trim_vector_copy_spaces_from_both_ends();
     trim_vector_copy_spaces_from_left_only();
     trim_vector_copy_spaces_from_right_only();
+    trim_spaces_and_tabs_from_both_ends_wide_chars();
     trim_left_with_specified_characters();
     trim_left_with_specified_characters_via_char_pointer();
     trim_left_with_specified_characters_via_non_const_char_pointer();
     trim_left_with_specified_characters_via_string();
-    trim_spaces_and_tabs_from_both_ends_wide_chars();
     trim_right_with_specified_characters();
     trim_right_with_specified_characters_via_char_pointer();
     trim_right_with_specified_characters_via_non_const_char_pointer();
     trim_right_with_specified_characters_via_string();
-    trim_left_with_predicate();
     trim_both_with_specified_characters();
     trim_both_with_specified_characters_via_char_pointer();
     trim_both_with_specified_characters_via_non_const_char_pointer();
     trim_both_with_specified_characters_via_string();
+    trim_left_with_predicate();
     trim_right_with_predicate();
     trim_both_with_predicate();
 }
