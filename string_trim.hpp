@@ -218,10 +218,56 @@ std::remove_reference_t<Container> trim_copy_left(Container &&s) {
     return string_type(find_first_non_whitespace(s.begin(), s.end()), s.end());
 }
 
+template <typename Container, typename CharacterListOrPredicate>
+std::remove_reference_t<Container> trim_copy_left(
+    Container &&s, CharacterListOrPredicate &&space_chars_or_predicate) {
+    using string_type= std::remove_reference_t<Container>;
+    return string_type(
+        find_first_non_whitespace(s.begin(), s.end(), space_chars_or_predicate),
+        s.end());
+}
+
+template <typename Container>
+std::remove_reference_t<Container> trim_copy_left(
+    Container &s, typename Container::value_type const *space_chars) {
+    return trim_copy_left(
+        s, std::basic_string_view<typename Container::value_type>(space_chars));
+}
+
+template <typename Container>
+std::remove_reference_t<Container>
+trim_copy_left(Container &s, typename Container::value_type *space_chars) {
+    return trim_copy_left(
+        s, std::basic_string_view<typename Container::value_type>(space_chars));
+}
+
 template <typename Container>
 std::remove_reference_t<Container> trim_copy_right(Container &&s) {
     using string_type= std::remove_reference_t<Container>;
     return string_type(s.begin(), find_last_non_whitespace(s.begin(), s.end()));
+}
+
+template <typename Container, typename CharacterListOrPredicate>
+std::remove_reference_t<Container> trim_copy_right(
+    Container &&s, CharacterListOrPredicate &&space_chars_or_predicate) {
+    using string_type= std::remove_reference_t<Container>;
+    return string_type(
+        s.begin(),
+        find_last_non_whitespace(s.begin(), s.end(), space_chars_or_predicate));
+}
+
+template <typename Container>
+std::remove_reference_t<Container> trim_copy_right(
+    Container &s, typename Container::value_type const *space_chars) {
+    return trim_copy_right(
+        s, std::basic_string_view<typename Container::value_type>(space_chars));
+}
+
+template <typename Container>
+std::remove_reference_t<Container>
+trim_copy_right(Container &s, typename Container::value_type *space_chars) {
+    return trim_copy_right(
+        s, std::basic_string_view<typename Container::value_type>(space_chars));
 }
 
 template <typename Container>
@@ -233,4 +279,33 @@ std::remove_reference_t<Container> trim_copy(Container &&s) {
     return (copy_begin == end) ?
                string_type(end, end) :
                string_type(copy_begin, find_last_non_whitespace(begin, end));
+}
+
+template <typename Container, typename CharacterListOrPredicate>
+std::remove_reference_t<Container>
+trim_copy(Container &&s, CharacterListOrPredicate &&space_chars_or_predicate) {
+    using string_type= std::remove_reference_t<Container>;
+    auto const begin= s.begin();
+    auto const end= s.end();
+    auto const copy_begin=
+        find_first_non_whitespace(begin, end, space_chars_or_predicate);
+    return (copy_begin == end) ?
+               string_type(end, end) :
+               string_type(
+                   copy_begin, find_last_non_whitespace(
+                                   begin, end, space_chars_or_predicate));
+}
+
+template <typename Container>
+std::remove_reference_t<Container>
+trim_copy(Container &s, typename Container::value_type const *space_chars) {
+    return trim_copy(
+        s, std::basic_string_view<typename Container::value_type>(space_chars));
+}
+
+template <typename Container>
+std::remove_reference_t<Container>
+trim_copy(Container &s, typename Container::value_type *space_chars) {
+    return trim_copy(
+        s, std::basic_string_view<typename Container::value_type>(space_chars));
 }
