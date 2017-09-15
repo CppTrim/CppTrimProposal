@@ -174,6 +174,29 @@ void trim_right(Container &s, typename Container::value_type *space_chars) {
         s, std::basic_string_view<typename Container::value_type>(space_chars));
 }
 
+template <typename Container, typename CharacterList>
+typename std::enable_if<
+    !is_whitespace_predicate<CharacterList, typename Container::value_type>,
+    void>::type
+trim(Container &s, CharacterList &&space_chars) {
+    trim_left(s,space_chars);
+    trim_right(s,space_chars);
+}
+
+template <typename Container>
+void trim(
+    Container &s, typename Container::value_type const *space_chars) {
+    trim(
+        s, std::basic_string_view<typename Container::value_type>(space_chars));
+}
+
+template <typename Container>
+void trim(Container &s, typename Container::value_type *space_chars) {
+    trim(
+        s, std::basic_string_view<typename Container::value_type>(space_chars));
+}
+
+
 template <typename Container, typename Predicate>
 typename std::enable_if<
     is_whitespace_predicate<Predicate, typename Container::value_type>,
