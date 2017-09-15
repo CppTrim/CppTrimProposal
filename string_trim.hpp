@@ -3,19 +3,72 @@
 #include <cctype>
 #include <type_traits>
 #include <iterator>
+#include <algorithm>
 
-template<typename Iterator>
-Iterator find_first_non_whitespace(Iterator begin,Iterator end){
+template <typename Iterator>
+typename std::enable_if<
+    std::is_same_v<char, std::remove_cv_t<typename std::iterator_traits<Iterator>::value_type> >,
+    Iterator>::type
+find_first_non_whitespace(Iterator begin, Iterator end) {
+    auto pos= begin;
+    for(; (pos != end) && std::isspace(*pos); ++pos)
+        ;
+    return pos;
+}
+
+template <typename Iterator>
+typename std::enable_if<
+    std::is_same_v<wchar_t, std::remove_cv_t<typename std::iterator_traits<Iterator>::value_type> >,
+    Iterator>::type
+find_first_non_whitespace(Iterator begin, Iterator end) {
+    auto pos= begin;
+    for(; (pos != end) && std::iswspace(*pos); ++pos)
+        ;
+    return pos;
+}
+
+template<typename Iterator,typename CharacterList>
+Iterator find_first_non_whitespace(Iterator begin,Iterator end,CharacterList&& space_chars){
     auto pos=begin;
-    for(;(pos!=end) && std::isspace(*pos);++pos);
+    auto begin_of_chars=std::begin(space_chars);
+    auto end_of_chars=std::end(space_chars);
+    for(;(pos!=end) && (std::find(begin_of_chars,end_of_chars,*pos)!=end_of_chars);++pos);
     return pos;
 }
 
 template<typename Iterator>
-Iterator find_last_non_whitespace(Iterator begin,Iterator end){
+typename std::enable_if<
+    std::is_same_v<char, std::remove_cv_t<typename std::iterator_traits<Iterator>::value_type> >,
+    Iterator>::type
+find_last_non_whitespace(Iterator begin,Iterator end){
     auto endpos= std::make_reverse_iterator(end);
     for(auto start= std::make_reverse_iterator(begin);
         (endpos != start) && std::isspace(*endpos); ++endpos);
+    return endpos.base();
+}
+
+template<typename Iterator>
+typename std::enable_if<
+    std::is_same_v<wchar_t, std::remove_cv_t<typename std::iterator_traits<Iterator>::value_type> >,
+    Iterator>::type
+find_last_non_whitespace(Iterator begin,Iterator end){
+    auto endpos= std::make_reverse_iterator(end);
+    for(auto start= std::make_reverse_iterator(begin);
+        (endpos != start) && std::iswspace(*endpos); ++endpos);
+    return endpos.base();
+}
+
+template <typename Iterator, typename CharacterList>
+Iterator find_last_non_whitespace(
+    Iterator begin, Iterator end, CharacterList &&space_chars) {
+    auto endpos= std::make_reverse_iterator(end);
+    auto begin_of_chars= std::begin(space_chars);
+    auto end_of_chars= std::end(space_chars);
+    for(auto start= std::make_reverse_iterator(begin);
+        (endpos != start) &&
+        (std::find(begin_of_chars, end_of_chars, *endpos) != end_of_chars);
+        ++endpos)
+        ;
     return endpos.base();
 }
 
@@ -33,6 +86,42 @@ template<typename Container>
 void trim(Container& s){
     trim_left(s);
     trim_right(s);
+}
+
+template<typename Container,typename CharacterList>
+void trim_left(Container& s,CharacterList&& space_chars){
+    s.erase(s.begin(),find_first_non_whitespace(s.begin(),s.end(),space_chars));
+}
+
+template <typename Container>
+void trim_left(
+    Container &s, typename Container::value_type const *space_chars) {
+    trim_left(
+        s, std::basic_string_view<typename Container::value_type>(space_chars));
+}
+
+template <typename Container>
+void trim_left(Container &s, typename Container::value_type *space_chars) {
+    trim_left(
+        s, std::basic_string_view<typename Container::value_type>(space_chars));
+}
+
+template<typename Container,typename CharacterList>
+void trim_right(Container& s,CharacterList&& space_chars){
+    s.erase(find_last_non_whitespace(s.begin(),s.end(),space_chars),s.end());
+}
+
+template <typename Container>
+void trim_right(
+    Container &s, typename Container::value_type const *space_chars) {
+    trim_right(
+        s, std::basic_string_view<typename Container::value_type>(space_chars));
+}
+
+template <typename Container>
+void trim_right(Container &s, typename Container::value_type *space_chars) {
+    trim_right(
+        s, std::basic_string_view<typename Container::value_type>(space_chars));
 }
 
 template<typename Container>
