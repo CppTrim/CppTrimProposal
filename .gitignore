@@ -11,3 +11,4 @@
 string_trim_tests
 string_trim_tests.o
 .sconsign.dblite
+*~
