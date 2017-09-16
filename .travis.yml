@@ -58,11 +58,6 @@ before_install:
   - export PATH=$PWD/scons-3.0.0.alpha.20170821/script:$PATH
   - eval "${MATRIX_EVAL}"
   - printenv
-  - which scons
-
-# NB Travic-CI is running Trusty which has Python 3.4. SCons needs Python 3.5 or greater to run.
-# Thus must revert to using Python 2.7. :-(
 
 script:
-  - scons test
-  #- python $PWD/scons-3.0.0.alpha.20170821/script/scons test
+  - which scons && scons test

@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import os
 
 # It is assumed that the C++ compiler is g++ >= 7.0 or clang >= 3.9
@@ -6,6 +8,8 @@ import os
 cxx_flags = ['-std=c++1z', '-g']
 
 if 'CXX' in os.environ:
+    print('XXXX', os.environ['CXX'])
+
     if os.environ['CXX'].startswith('clang++'):
         cpp_environment = Environment(
             tools=['clangxx', 'link'],

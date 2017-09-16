@@ -1,5 +1,7 @@
 # -*- coding: utf-8; -*-
 
+from __future__ import print_function
+
 """SCons.Tool.clang++
 
 Tool-specific initialization for clang++.
@@ -51,6 +53,9 @@ compilers = ['clang++']
 
 def generate(env):
     """Add Builders and construction variables for clang++ to an Environment."""
+
+    print('XXXX', 'Using clangxx tool.')
+
     static_obj, shared_obj = SCons.Tool.createObjBuilders(env)
 
     cxx.generate(env)
