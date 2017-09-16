@@ -1,7 +1,8 @@
 .PHONY: test doc clean
 
 CXX=g++-7
-CXXFLAGS=-std=c++1z -g
+EXTRACXXFLAGS=
+CXXFLAGS=-std=c++1z -g $(EXTRACXXFLAGS)
 
 TESTROOT=string_trim_tests
 DOCROOT=proposal
