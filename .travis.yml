@@ -62,4 +62,4 @@ before_install:
 
 script:
   #- scons test
-  - $PWD/scons-3.0.0.alpha.20170821/script/scons test
+  - python3 $PWD/scons-3.0.0.alpha.20170821/script/scons test
