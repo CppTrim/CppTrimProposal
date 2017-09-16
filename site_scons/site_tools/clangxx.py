@@ -45,7 +45,7 @@ import sys
 
 import SCons.Tool
 import SCons.Util
-import SCons.Tool.cxx
+import cxx
 
 compilers = ['clang++']
 
@@ -53,7 +53,7 @@ def generate(env):
     """Add Builders and construction variables for clang++ to an Environment."""
     static_obj, shared_obj = SCons.Tool.createObjBuilders(env)
 
-    SCons.Tool.cxx.generate(env)
+    cxx.generate(env)
 
     env['CXX']        = env.Detect(compilers) or 'clang++'
 
