@@ -54,12 +54,15 @@ matrix:
 before_install:
   - wget https://testpypi.python.org/packages/07/b5/a62e2884076bd96cb259f64eccb0fb0106f2b163977529ab416e4fc69a4a/scons-3.0.0.alpha.20170821.tar.gz#md5=c5242fa876ab0b3dc856ff90d110a5da
   - tar -xzvf scons-3.0.0.alpha.20170821.tar.gz
-  #- export PATH=$PWD/scons-3.0.0.alpha.20170821/script:$PATH
+  - chmod a+x $PWD/scons-3.0.0.alpha.20170821/script/scons
+  - export PATH=$PWD/scons-3.0.0.alpha.20170821/script:$PATH
   - eval "${MATRIX_EVAL}"
-  #- printenv
-  #- which scons
+  - printenv
+  - which scons
 
+# NB Travic-CI is running Trusty which has Python 3.4. SCons needs Python 3.5 or greater to run.
+# Thus must revert to using Python 2.7. :-(
 
 script:
-  #- scons test
-  - python $PWD/scons-3.0.0.alpha.20170821/script/scons test
+  - scons test
+  #- python $PWD/scons-3.0.0.alpha.20170821/script/scons test
