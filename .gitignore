@@ -13,3 +13,4 @@ string_trim_tests.o
 .sconsign.dblite
 *~
 __pycache__/
+*.pyc
