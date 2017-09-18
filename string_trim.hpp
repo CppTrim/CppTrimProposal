@@ -150,6 +150,15 @@ find_first_non_whitespace(
 }
 
 template <typename Iter>
+REQUIRES((Iterator<Iter>))
+Iter find_first_non_whitespace(Iter begin, Iter end, std::locale& loc) {
+    auto pos= begin;
+    for(; (pos != end) && std::isspace(*pos,loc); ++pos)
+        ;
+    return pos;
+}
+
+template <typename Iter>
 REQUIRES(
     (BidirectionalIterator<Iter> &&
      std::is_same_v<
@@ -219,6 +228,16 @@ find_last_non_whitespace(Iter begin, Iter end, Predicate &&is_white_space) {
     auto endpos= std::make_reverse_iterator(end);
     for(auto start= std::make_reverse_iterator(begin);
         (endpos != start) && is_white_space(*endpos); ++endpos)
+        ;
+    return endpos.base();
+}
+
+template <typename Iter>
+REQUIRES((BidirectionalIterator<Iter>))
+    Iter find_last_non_whitespace(Iter begin, Iter end, std::locale& loc) {
+    auto endpos= std::make_reverse_iterator(end);
+    for(auto start= std::make_reverse_iterator(begin);
+        (endpos != start) && std::isspace(*endpos, loc); ++endpos)
         ;
     return endpos.base();
 }
@@ -327,6 +346,28 @@ void trim(Container &s, typename Container::value_type *space_chars) {
 }
 
 template <typename Container>
+REQUIRES((StringContainer<Container>))
+void trim_left(Container &s, std::locale &loc) {
+    s.erase(
+        std::begin(s),
+        find_first_non_whitespace(std::begin(s), std::end(s), loc));
+}
+
+template <typename Container>
+REQUIRES((StringContainer<Container>))
+void trim_right(Container &s, std::locale &loc) {
+    s.erase(
+        find_last_non_whitespace(std::begin(s), std::end(s), loc), std::end(s));
+}
+
+template <typename Container>
+REQUIRES((StringContainer<Container>))
+void trim(Container &s, std::locale& loc) {
+    trim_left(s, loc);
+    trim_right(s, loc);
+}
+
+template <typename Container>
 REQUIRES((CopyableStringContainer<Container>))
 std::remove_reference_t<Container> trim_copy_left(Container &&s) {
     using string_type= std::remove_reference_t<Container>;
@@ -368,6 +409,16 @@ std::remove_reference_t<Container> trim_copy_left(
 
 template <typename Container>
 REQUIRES((CopyableStringContainer<Container>))
+std::remove_reference_t<Container> trim_copy_left(
+    Container &&s, std::locale &loc) {
+    using string_type= std::remove_reference_t<Container>;
+    return string_type(
+        find_first_non_whitespace(std::begin(s), std::end(s), loc),
+        std::end(s));
+}
+
+template <typename Container>
+REQUIRES((CopyableStringContainer<Container>))
 std::remove_reference_t<Container> trim_copy_right(Container &&s) {
     using string_type= std::remove_reference_t<Container>;
     return string_type(
@@ -404,6 +455,16 @@ std::remove_reference_t<Container> trim_copy_right(
     Container &s, typename Container::value_type *space_chars) {
     return trim_copy_right(
         s, std::basic_string_view<typename Container::value_type>(space_chars));
+}
+
+template <typename Container>
+REQUIRES((CopyableStringContainer<Container>))
+std::remove_reference_t<Container> trim_copy_right(
+    Container &&s, std::locale &loc) {
+    using string_type= std::remove_reference_t<Container>;
+    return string_type(
+        std::begin(s),
+        find_last_non_whitespace(std::begin(s), std::end(s), loc));
 }
 
 template <typename Container>
@@ -453,4 +514,17 @@ std::remove_reference_t<Container> trim_copy(
     Container &s, typename Container::value_type *space_chars) {
     return trim_copy(
         s, std::basic_string_view<typename Container::value_type>(space_chars));
+}
+
+template <typename Container>
+REQUIRES((CopyableStringContainer<Container>))
+std::remove_reference_t<Container> trim_copy(Container &&s, std::locale &loc) {
+    using string_type= std::remove_reference_t<Container>;
+    auto const begin= std::begin(s);
+    auto const end= std::end(s);
+    auto const copy_begin= find_first_non_whitespace(begin, end, loc);
+    return (copy_begin == end) ?
+               string_type(end, end) :
+               string_type(
+                   copy_begin, find_last_non_whitespace(begin, end, loc));
 }
