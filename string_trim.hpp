@@ -232,6 +232,16 @@ find_last_non_whitespace(Iter begin, Iter end, Predicate &&is_white_space) {
     return endpos.base();
 }
 
+template <typename Iter>
+REQUIRES((BidirectionalIterator<Iter>))
+    Iter find_last_non_whitespace(Iter begin, Iter end, std::locale& loc) {
+    auto endpos= std::make_reverse_iterator(end);
+    for(auto start= std::make_reverse_iterator(begin);
+        (endpos != start) && std::isspace(*endpos, loc); ++endpos)
+        ;
+    return endpos.base();
+}
+
 template <typename Container>
 REQUIRES((StringContainer<Container>))
 void trim_left(Container &s) {
@@ -337,9 +347,17 @@ void trim(Container &s, typename Container::value_type *space_chars) {
 
 template <typename Container>
 REQUIRES((StringContainer<Container>))
-    void trim_left(Container &s,std::locale& loc) {
+void trim_left(Container &s, std::locale &loc) {
     s.erase(
-        std::begin(s), find_first_non_whitespace(std::begin(s), std::end(s), loc));
+        std::begin(s),
+        find_first_non_whitespace(std::begin(s), std::end(s), loc));
+}
+
+template <typename Container>
+REQUIRES((StringContainer<Container>))
+void trim_right(Container &s, std::locale &loc) {
+    s.erase(
+        find_last_non_whitespace(std::begin(s), std::end(s), loc), std::end(s));
 }
 
 template <typename Container>

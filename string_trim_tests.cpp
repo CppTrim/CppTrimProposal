@@ -639,6 +639,24 @@ void trim_left_wide_with_locale(){
     assert(s==hello);
 }
 
+void trim_right_with_locale(){
+    std::string const hello="hello";
+    std::string const orig=hello+"aaabbabab";
+    auto s=orig;
+    std::locale custom_locale(std::locale(),new ab_whitespace_ctype());
+    trim_right(s,custom_locale);
+    assert(s==hello);
+}
+
+void trim_right_wide_with_locale(){
+    std::wstring const hello=L"hello";
+    std::wstring const orig=hello+L"aaabbabab";
+    auto s=orig;
+    std::locale custom_locale(std::locale(),new ab_whitespace_ctype_wchar());
+    trim_right(s,custom_locale);
+    assert(s==hello);
+}
+
 int main(){
     trim_empty_string_does_nothing();
     trim_non_space_string_does_nothing();
@@ -704,5 +722,8 @@ int main(){
     trim_copy_left_with_predicate();
     trim_copy_right_with_predicate();
     trim_copy_both_with_predicate();
+    trim_left_with_locale();
     trim_left_wide_with_locale();
+    trim_right_with_locale();
+    trim_right_wide_with_locale();
 }
