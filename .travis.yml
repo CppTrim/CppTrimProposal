@@ -52,12 +52,11 @@ matrix:
 
 
 before_install:
-  - wget https://testpypi.python.org/packages/07/b5/a62e2884076bd96cb259f64eccb0fb0106f2b163977529ab416e4fc69a4a/scons-3.0.0.alpha.20170821.tar.gz#md5=c5242fa876ab0b3dc856ff90d110a5da
+  - wget https://www.russel.org.uk/Workshops/CppTrim/scons-3.0.0.alpha.20170821.tar.gz
   - tar -xzvf scons-3.0.0.alpha.20170821.tar.gz
   - chmod a+x $PWD/scons-3.0.0.alpha.20170821/script/scons
   - export PATH=$PWD/scons-3.0.0.alpha.20170821/script:$PATH
   - eval "${MATRIX_EVAL}"
-  - printenv
 
 script:
-  - which scons && scons test
+  - scons test

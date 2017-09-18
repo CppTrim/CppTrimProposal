@@ -8,8 +8,6 @@ import os
 cxx_flags = ['-std=c++1z', '-g']
 
 if 'CXX' in os.environ:
-    print('XXXX', os.environ['CXX'])
-
     if os.environ['CXX'].startswith('clang++'):
         cpp_environment = Environment(
             tools=['clangxx', 'link'],
