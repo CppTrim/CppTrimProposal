@@ -361,6 +361,13 @@ void trim_right(Container &s, std::locale &loc) {
 }
 
 template <typename Container>
+REQUIRES((StringContainer<Container>))
+void trim(Container &s, std::locale& loc) {
+    trim_left(s, loc);
+    trim_right(s, loc);
+}
+
+template <typename Container>
 REQUIRES((CopyableStringContainer<Container>))
 std::remove_reference_t<Container> trim_copy_left(Container &&s) {
     using string_type= std::remove_reference_t<Container>;
