@@ -150,6 +150,15 @@ find_first_non_whitespace(
 }
 
 template <typename Iter>
+REQUIRES((Iterator<Iter>))
+Iter find_first_non_whitespace(Iter begin, Iter end, std::locale& loc) {
+    auto pos= begin;
+    for(; (pos != end) && std::isspace(*pos,loc); ++pos)
+        ;
+    return pos;
+}
+
+template <typename Iter>
 REQUIRES(
     (BidirectionalIterator<Iter> &&
      std::is_same_v<
@@ -324,6 +333,13 @@ REQUIRES((StringContainer<Container>))
 void trim(Container &s, typename Container::value_type *space_chars) {
     trim(
         s, std::basic_string_view<typename Container::value_type>(space_chars));
+}
+
+template <typename Container>
+REQUIRES((StringContainer<Container>))
+    void trim_left(Container &s,std::locale& loc) {
+    s.erase(
+        std::begin(s), find_first_non_whitespace(std::begin(s), std::end(s), loc));
 }
 
 template <typename Container>

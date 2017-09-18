@@ -578,6 +578,67 @@ void trim_copy_both_with_predicate(){
     assert(s==orig);
 }
 
+class ab_whitespace_ctype:
+    public std::ctype<char>{
+    mask mask_table[std::ctype<char>::table_size];
+public:
+    ab_whitespace_ctype():
+        std::ctype<char>(mask_table){
+        auto const default_table=std::ctype<char>::classic_table();
+        for(unsigned i=0;i<std::ctype<char>::table_size;++i){
+            mask_table[i]=default_table[i];
+            if((i=='a') || (i=='b'))
+                mask_table[i]|=space;
+        }
+    }
+};
+
+class ab_whitespace_ctype_wchar:
+    public std::ctype<wchar_t>{
+public:
+    bool do_is(mask m, wchar_t c) const{
+        mask classification;
+        do_is(&c,&c+1,&classification);
+        return (classification&m)!=0;
+    }
+    const wchar_t* do_is(const wchar_t* low, const wchar_t* high,
+                       mask* vec) const{
+        std::ctype<wchar_t>::do_is(low,high,vec);
+        for(;low!=high;++low,++vec){
+            if((*low==L'a') || (*low==L'b'))
+                *vec|=space;
+        }
+        return high;
+    }
+    const wchar_t* do_scan_is(mask m, const wchar_t* low, const wchar_t* high) const{
+        for(;low!=high && !do_is(m,*low);++low);
+        return low;
+    }
+    const wchar_t* do_scan_not(mask m, const wchar_t* low, const wchar_t* high) const{
+        for(;low!=high && do_is(m,*low);++low);
+        return low;
+    }
+    
+};
+
+void trim_left_with_locale(){
+    std::string const hello="hello";
+    std::string const orig="aaabbabab"+hello;
+    auto s=orig;
+    std::locale custom_locale(std::locale(),new ab_whitespace_ctype());
+    trim_left(s,custom_locale);
+    assert(s==hello);
+}
+
+void trim_left_wide_with_locale(){
+    std::wstring const hello=L"hello";
+    std::wstring const orig=L"aaabbabab"+hello;
+    auto s=orig;
+    std::locale custom_locale(std::locale(),new ab_whitespace_ctype_wchar());
+    trim_left(s,custom_locale);
+    assert(s==hello);
+}
+
 int main(){
     trim_empty_string_does_nothing();
     trim_non_space_string_does_nothing();
@@ -643,4 +704,5 @@ int main(){
     trim_copy_left_with_predicate();
     trim_copy_right_with_predicate();
     trim_copy_both_with_predicate();
+    trim_left_wide_with_locale();
 }
