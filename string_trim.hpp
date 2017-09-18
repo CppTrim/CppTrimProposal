@@ -409,6 +409,16 @@ std::remove_reference_t<Container> trim_copy_left(
 
 template <typename Container>
 REQUIRES((CopyableStringContainer<Container>))
+std::remove_reference_t<Container> trim_copy_left(
+    Container &&s, std::locale &loc) {
+    using string_type= std::remove_reference_t<Container>;
+    return string_type(
+        find_first_non_whitespace(std::begin(s), std::end(s), loc),
+        std::end(s));
+}
+
+template <typename Container>
+REQUIRES((CopyableStringContainer<Container>))
 std::remove_reference_t<Container> trim_copy_right(Container &&s) {
     using string_type= std::remove_reference_t<Container>;
     return string_type(
@@ -445,6 +455,16 @@ std::remove_reference_t<Container> trim_copy_right(
     Container &s, typename Container::value_type *space_chars) {
     return trim_copy_right(
         s, std::basic_string_view<typename Container::value_type>(space_chars));
+}
+
+template <typename Container>
+REQUIRES((CopyableStringContainer<Container>))
+std::remove_reference_t<Container> trim_copy_right(
+    Container &&s, std::locale &loc) {
+    using string_type= std::remove_reference_t<Container>;
+    return string_type(
+        std::begin(s),
+        find_last_non_whitespace(std::begin(s), std::end(s), loc));
 }
 
 template <typename Container>
@@ -494,4 +514,17 @@ std::remove_reference_t<Container> trim_copy(
     Container &s, typename Container::value_type *space_chars) {
     return trim_copy(
         s, std::basic_string_view<typename Container::value_type>(space_chars));
+}
+
+template <typename Container>
+REQUIRES((CopyableStringContainer<Container>))
+std::remove_reference_t<Container> trim_copy(Container &&s, std::locale &loc) {
+    using string_type= std::remove_reference_t<Container>;
+    auto const begin= std::begin(s);
+    auto const end= std::end(s);
+    auto const copy_begin= find_first_non_whitespace(begin, end, loc);
+    return (copy_begin == end) ?
+               string_type(end, end) :
+               string_type(
+                   copy_begin, find_last_non_whitespace(begin, end, loc));
 }
