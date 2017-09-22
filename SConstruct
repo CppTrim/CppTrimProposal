@@ -32,6 +32,18 @@ if 'EXTRACXXFLAGS' in os.environ:
 
 test = cpp_environment.Program('string_trim_tests.cpp')
 
+# For experimentation hardwire the location of rapidcheck. Need to check if
+# the library is in Conan.
+
+includes_directories = [os.environ['HOME'] + '/include']
+libs_directories = [os.environ['HOME'] + '/Built/' + location for location in ('lib', 'lib64')]
+
+property_test = cpp_environment.Program('string_trim_property_tests.cpp',
+                                        CPPPATH=includes_directories,
+                                        LINKFLAGS=['-L' + location for location in libs_directories],
+                                        LIBS='rapidcheck',
+)
+
 latex_environment = Environment(
     tools=['xetex'],
 )
@@ -39,4 +51,5 @@ latex_environment = Environment(
 document = latex_environment.XELATEX('proposal')
 
 Command('test', test, './$SOURCE')
+Command('property_test', property_test, './$SOURCE')
 Alias('doc', document)
