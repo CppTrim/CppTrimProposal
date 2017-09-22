@@ -80,7 +80,7 @@ but is designed and implemented from scratch.
 \chapter{Impact on the Standard}
 \label{sec:impact}
 
-Some new function templates are added.
+Some new function templates are added, along with supporting concepts.
 
 \chapter{Design Decisions}
 \label{sec:design}
@@ -111,6 +111,22 @@ in 3 additional ways:
   flexibility, and allows them to use any available mechanism to identify those
   characters.
 \end{enumerate}
+
+\section{In place versus copying}
+\label{sec:inplacevscopy}
+
+For many use cases, it is desirable to be able to trim strings in place since
+doing so avoids additional memory allocations. However, this can lead to
+additional unnecessary copying if the string to be trimmed cannot be modified:
+first the entire source string must be copied, and then trimmed. This proposal
+therefore offers two versions of each trim function: one which trims in place,
+and one which creates a new string.
+
+The in-place functions support any iterable container that holds a suitable
+character type, and supports erasing a range specified by a pair of iterators.
+
+The copy functions require instead that the container is a type that supports
+construction from a pair of iterators.
 
 \chapter{Technical Specifications}
 \label{sec:spec}
