@@ -3,6 +3,8 @@
 CXX=g++-7
 EXTRACXXFLAGS=
 CXXFLAGS=-std=c++1z -g $(EXTRACXXFLAGS)
+LATEXCOMMAND=xelatex
+LATEXFLAGS=-file-line-error -halt-on-error 
 
 TESTROOT=string_trim_tests
 DOCROOT=proposal
@@ -19,10 +21,10 @@ $(TESTROOT): $(TESTROOT).cpp $(HEADER) makefile
 doc: $(DOCROOT).pdf makefile
 
 $(DOCROOT).pdf: $(DOCROOT).ltx
-	xelatex $<
+	$(LATEXCOMMAND) $(LATEXFLAGS) $<
 	biber $(DOCROOT)
-	xelatex $<
-	xelatex $<
+	$(LATEXCOMMAND) $(LATEXFLAGS) $<
+	$(LATEXCOMMAND) $(LATEXFLAGS) $<
 
 clean:
 	rm -f $(TESTROOT)
