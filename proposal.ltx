@@ -128,6 +128,21 @@ character type, and supports erasing a range specified by a pair of iterators.
 The copy functions require instead that the container is a type that supports
 construction from a pair of iterators.
 
+\section{String Views}
+\label{sec:stringviews}
+
+\texttt{std::string_view} is not a container. Therefore in-place trimming cannot
+work. Nor is it constructible from a pair of iterators, since it requires
+contiguous storage, so it doesn't work with the ``normal'' \texttt{trim_copy}
+functions defined in this proposal. However, trimming string views is expected
+to be a common request. Therefore this proposal provides additional overloads of
+the \texttt{trim_copy} functions that take a
+\texttt{std::basic_string_view<CharType>} and return a
+\texttt{std::basic_string<CharType>}. The returned string is thus a copy of the
+original.
+
+Use cases for additional functions that provide a trimmed view of the original
+can be envisaged, but are not proposed at this time.
 \chapter{Technical Specifications}
 \label{sec:spec}
 
