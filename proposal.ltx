@@ -6,9 +6,11 @@
 \geometry{a4paper}
 \usepackage{fontspec}
 \usepackage{hyperref}
-%\usepackage{xcolor}
-%\usepackage{underscore}
-%\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{ulem}
+\usepackage{underscore}
+\usepackage{xspace}
+\usepackage{enumitem}
 \usepackage{listings}
 \usepackage[yyyymmdd]{datetime}
 \renewcommand\dateseparator{-}
@@ -16,6 +18,7 @@
 \addbibresource{proposal.bib}
 \pagestyle{myheadings}
 \markboth{\documentnumber}{\documentnumber}
+\input{macros}
 
 \title{Trimming strings}
 \author{Russel Winder, Anthony Williams, Emyr Williams}
@@ -72,7 +75,7 @@ used. However the Boost functions have not migrated into the standard library.
 
 This proposal is a new implementation for the C++17 standard inspired by the
 Boost implementation\cite{BoostTrim}, and also facilities in Rust and Python,
-but is an design and implementation from scratch.
+but is designed and implemented from scratch.
 
 \chapter{Impact on the Standard}
 \label{sec:impact}
@@ -82,8 +85,113 @@ Some new function templates are added.
 \chapter{Design Decisions}
 \label{sec:design}
 
+\section{Identifying characters to trim}
+\label{sec:characterstotrim}
+
+For a large number of users, ``whitespace'' means spaces and tabs only;
+certainly, the characters identified as whitespace by \texttt{std::isspace} are
+sufficient. This is thus the set of characters used by the functions proposed
+here, when no other source of whitespace characters is specified.
+
+However, this is insufficent for many users. This proposal therefore expands on
+this to allow the user to provide the set of whitespace characters to consider
+in 3 additional ways:
+
+\begin{enumerate}
+\item By locale: the Boost trim functions allow specifying a locale, and the
+  functions in this proposal do too. If a \texttt{std::locale} object is supplied, then the relevant
+  \texttt{std::ctype} facet from that locale is used to identify whitespace
+  characters.
+\item With an explicit list: instead of a locale, the user can supply a list
+  of those characters they wish to trim. This allows the list to be fully
+  customized in an application-specific fashion.
+\item With a predicate: inspired by the Rust trim functions, the user can supply
+  a predicate for the trim functions to use when determining whether or not to
+  trim a given character. This thus provides users with the maximum possible
+  flexibility, and allows them to use any available mechanism to identify those
+  characters.
+\end{enumerate}
+
 \chapter{Technical Specifications}
 \label{sec:spec}
+
+Add a new header to table 53:
+
+\begin{tabularx}{\textwidth}{|X|l|}
+\hline
+\textbf{Subclause} & \textbf{Header} \\
+  \hline
+\added{24.x String trimming utilities} & \added{\texttt{<trim>}}\\
+\hline
+\end{tabularx}
+
+Add a new subclause to clause 24 [strings] as follows:
+
+\begin{addedblock}
+  \Sec1[string.trim]{String trimming utilities}
+  \label{sec:spec:string.trim}
+
+  \Sec2[string.trim.syn]{Header \texttt{<trim>} synopsis}
+  \label{sec:spec:string.trim.syn}
+
+  \begin{lstlisting}
+namespace std{
+template <typename Container>
+requires StringContainer<Container>
+void trim_left(Container &s);
+
+template <typename Container>
+requires StringContainer<Container>
+void trim_left(Container &s,std::locale& loc);
+
+template <typename Container, typename CharacterList>
+requires StringContainer<Container> && BasicContainer<CharacterList>
+void trim_left(Container &s, CharacterList &&chars);
+
+template <typename Container, typename Predicate>
+requires StringContainer<Container> &&
+    WhitespacePredicate<Predicate, typename Container::value_type>
+void trim_left(Container &s, Predicate &&pred);
+
+template <typename Container>
+requires StringContainer<Container>
+void trim_right(Container &s);
+
+template <typename Container>
+requires StringContainer<Container>
+void trim_right(Container &s,std::locale& loc);
+
+template <typename Container, typename CharacterList>
+requires StringContainer<Container> && BasicContainer<CharacterList>
+void trim_right(Container &s, CharacterList &&chars);
+
+template <typename Container, typename Predicate>
+requires StringContainer<Container> && 
+    WhitespacePredicate<Predicate, typename Container::value_type>
+void trim_right(Container &s, Predicate &&pred);
+
+template <typename Container>
+requires StringContainer<Container>
+void trim(Container &s);
+
+template <typename Container>
+requires StringContainer<Container>
+void trim(Container &s,std::locale& loc);
+
+template <typename Container, typename CharacterList>
+requires StringContainer<Container> && BasicContainer<CharacterList>
+void trim(Container &s, CharacterList &&chars);
+
+template <typename Container, typename Predicate>
+requires StringContainer<Container> &&
+    WhitespacePredicate<Predicate, typename Container::value_type>
+void trim(Container &s, Predicate &&pred);
+
+}
+  \end{lstlisting}
+
+\end{addedblock}
+
 
 \chapter{Acknowledgements}
 \label{sec:acknowledgements}
