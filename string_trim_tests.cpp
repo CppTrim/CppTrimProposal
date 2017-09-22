@@ -696,6 +696,16 @@ void trim_copy_both_with_locale(){
     assert(s==orig);
 }
 
+void trim_copy_left_string_view(){
+    std::string const hello="hello     ";
+    std::string const orig="     "+hello;
+    std::string_view s=orig;
+    auto s2=trim_copy_left(s);
+    assert(s2==hello);
+    assert(s==orig);
+    assert((std::is_same_v<decltype(s2),std::string>));
+}
+
 int main(){
     trim_empty_string_does_nothing();
     trim_non_space_string_does_nothing();
@@ -769,4 +779,5 @@ int main(){
     trim_copy_left_with_locale();
     trim_copy_right_with_locale();
     trim_copy_both_with_locale();
+    trim_copy_left_string_view();
 }

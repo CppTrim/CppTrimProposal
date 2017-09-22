@@ -375,6 +375,13 @@ std::remove_reference_t<Container> trim_copy_left(Container &&s) {
         find_first_non_whitespace(std::begin(s), std::end(s)), std::end(s));
 }
 
+template <typename CharType>
+std::basic_string<CharType> trim_copy_left(std::basic_string_view<CharType> s) {
+    using string_type= std::basic_string<CharType>;
+    return string_type(
+        find_first_non_whitespace(std::begin(s), std::end(s)), std::end(s));
+}
+
 template <typename Container, typename CharacterListOrPredicate>
 REQUIRES(
     (CopyableStringContainer<Container> &&
