@@ -30,6 +30,8 @@
 \setsansfont{Liberation Sans}
 \setmonofont{Liberation Mono}
 
+\lstset{language=C++}
+
 \begin{document}
 
 \maketitle
@@ -54,14 +56,14 @@
 \label{sec:introduction}
 
 This proposal presents facilities to trim leading and trailing characters
-(whitespace usually and by default) from strings. Characters can be trimmed
-from the left or right of the string, either in-place, or by returning a new
-string which is a copy of the original, but trimmed. The set of characters can
-either be implicit (using \texttt{std::isspace}), or specified as those defined by a
+(whitespace usually and by default) from strings. Characters can be trimmed from
+the left or right of the string, either in-place, or by returning a new string
+which is a copy of the original, but trimmed. The set of characters can either
+be implicit (using \lstinline{std::isspace}), or specified as those defined by a
 locale, those from a specific list, or with a custom predicate to identify
 whitespace.
 
-The ``strings'' are not limited to \texttt{std::string}: any container of
+The ``strings'' are not limited to \lstinline{std::string}: any container of
 characters can be used.
 
 \chapter{Motivation}
@@ -89,21 +91,21 @@ Some new function templates are added, along with supporting concepts.
 \label{sec:characterstotrim}
 
 For a large number of users, ``whitespace'' means spaces and tabs only;
-certainly, the characters identified as whitespace by \texttt{std::isspace} are
-sufficient. This is thus the set of characters used by the functions proposed
-here, when no other source of whitespace characters is specified.
+certainly, the characters identified as whitespace by \lstinline{std::isspace}
+are sufficient. This is thus the set of characters used by the functions
+proposed here, when no other source of whitespace characters is specified.
 
-However, this is insufficent for many users. This proposal therefore expands on
+However, this is insufficient for many users. This proposal therefore expands on
 this to allow the user to provide the set of whitespace characters to consider
 in 3 additional ways:
 
 \begin{enumerate}
 \item By locale: the Boost trim functions allow specifying a locale, and the
-  functions in this proposal do too. If a \texttt{std::locale} object is supplied, then the relevant
-  \texttt{std::ctype} facet from that locale is used to identify whitespace
-  characters.
-\item With an explicit list: instead of a locale, the user can supply a list
-  of those characters they wish to trim. This allows the list to be fully
+  functions in this proposal do too. If a \lstinline{std::locale} object is
+  supplied, then the relevant \lstinline{std::ctype} facet from that locale is
+  used to identify whitespace characters.
+\item With an explicit list: instead of a locale, the user can supply a list of
+  those characters they wish to trim. This allows the list to be fully
   customized in an application-specific fashion.
 \item With a predicate: inspired by the Rust trim functions, the user can supply
   a predicate for the trim functions to use when determining whether or not to
@@ -131,30 +133,33 @@ construction from a pair of iterators.
 \section{String Views}
 \label{sec:stringviews}
 
-\texttt{std::string_view} is not a container. Therefore in-place trimming cannot
-work. Nor is it constructible from a pair of iterators, since it requires
-contiguous storage, so it doesn't work with the ``normal'' \texttt{trim_copy}
+\lstinline{std::string_view} is not a container. Therefore in-place trimming
+cannot work. Nor is it constructible from a pair of iterators, since it requires
+contiguous storage, so it doesn't work with the ``normal'' \lstinline{trim_copy}
 functions defined in this proposal. However, trimming string views is expected
 to be a common request. Therefore this proposal provides additional overloads of
-the \texttt{trim_copy} functions that take a
-\texttt{std::basic_string_view<CharType>} and return a
-\texttt{std::basic_string<CharType>}. The returned string is thus a copy of the
-original.
+the \lstinline{trim_copy} functions that take a
+\lstinline{std::basic_string_view<CharType>} and return a
+\lstinline{std::basic_string<CharType>}. The returned string is thus a copy of
+the original.
 
 Use cases for additional functions that provide a trimmed view of the original
 can be envisaged, but are not proposed at this time.
+
 \chapter{Technical Specifications}
 \label{sec:spec}
 
 Add a new header to table 53:
 
-\begin{tabularx}{\textwidth}{|X|l|}
-\hline
-\textbf{Subclause} & \textbf{Header} \\
-  \hline
-\added{24.x String trimming utilities} & \added{\texttt{<trim>}}\\
-\hline
-\end{tabularx}
+\begin{table}[ht]
+  \begin{tabularx}{\textwidth}{|X|l|}
+    \hline
+    \textbf{Subclause} & \textbf{Header} \\
+    \hline
+    \added{24.x String trimming utilities} & \added{\lstinline{<trim>}}\\
+    \hline
+  \end{tabularx}
+\end{table}
 
 Add a new subclause to clause 24 [strings] as follows:
 
@@ -162,7 +167,7 @@ Add a new subclause to clause 24 [strings] as follows:
   \Sec1[string.trim]{String trimming utilities}
   \label{sec:spec:string.trim}
 
-  \Sec2[string.trim.syn]{Header \texttt{<trim>} synopsis}
+  \Sec2[string.trim.syn]{Header \lstinline{<trim>} synopsis}
   \label{sec:spec:string.trim.syn}
 
   \begin{lstlisting}
@@ -197,7 +202,7 @@ requires StringContainer<Container> && BasicContainer<CharacterList>
 void trim_right(Container &s, CharacterList &&chars);
 
 template <typename Container, typename Predicate>
-requires StringContainer<Container> && 
+requires StringContainer<Container> &&
     WhitespacePredicate<Predicate, typename Container::value_type>
 void trim_right(Container &s, Predicate &&pred);
 
@@ -235,3 +240,5 @@ void trim(Container &s, Predicate &&pred);
 % Local Variables:
 % fill-column: 80
 % End:
+
+%  LocalWords:  whitespace iterable constructible
