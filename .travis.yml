@@ -66,7 +66,7 @@ before_install:
 
 before_script:
   - mkdir RapidCheckBuild
-  - cd RapidCheckBuild && cmake ../RapidCheck && make
+  - pushd RapidCheckBuild && cmake ../RapidCheck && make && popd
 
 script:
   - scons test property_test
