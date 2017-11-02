@@ -2,10 +2,10 @@ from __future__ import print_function
 
 import os
 
-# It is assumed that the C++ compiler is g++ >= 7.0 or clang >= 3.9
-
-# Clang 5 and later supports -std=c++17
-cxx_flags = ['-std=c++1z', '-g']
+# It is assumed that the C++ compiler is g++ >= 7.0 or clang >= 3.9. Clang 5
+# and later and g++ 7.2.1 and later support -std=c++17, so no need for
+# -std=c++1z
+cxx_flags = ['-std=c++17', '-g']
 
 if 'CXX' in os.environ:
     if os.environ['CXX'].startswith('clang++'):
