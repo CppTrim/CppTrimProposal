@@ -2,7 +2,6 @@ language: cpp
 sudo: true
 dist: trusty
 
-
 matrix:
   include:
     - os: linux
@@ -14,30 +13,6 @@ matrix:
             - g++-7
       env:
         - MATRIX_EVAL="CXX=g++-7"
-
-    - os: linux
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-3.9
-          packages:
-            - g++-7
-            - clang-3.9
-      env:
-        - MATRIX_EVAL="CXX=clang++-3.9"
-
-    - os: linux
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-4.0
-          packages:
-            - g++-7
-            - clang-4.0
-      env:
-        - MATRIX_EVAL="CXX=clang++-4.0"
 
     - os: linux
       addons:
