@@ -65,8 +65,6 @@ before_install:
   - eval "${MATRIX_EVAL}"
 
 before_script:
-  - git submodule init
-  - git submodule update
   - mkdir RapidCheckBuild
   - cd RapidCheckBuild && cmake ../RapidCheck && make
 
