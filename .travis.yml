@@ -64,5 +64,11 @@ before_install:
   - export PATH=$PWD/scons-3.0.0/script:$PATH
   - eval "${MATRIX_EVAL}"
 
+before_script:
+  - git submodule init
+  - git submodule update
+  - mkdir RapidCheckBuild
+  - cd RapidCheckBuild && cmake ../RapidCheck && make
+
 script:
-  - scons test
+  - scons test property_test
