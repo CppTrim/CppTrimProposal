@@ -35,8 +35,8 @@ test = cpp_environment.Program('string_trim_tests.cpp')
 # For experimentation hardwire the location of rapidcheck. Need to check if
 # the library is in Conan.
 
-includes_directories = [os.environ['HOME'] + '/include']
-libs_directories = [os.environ['HOME'] + '/Built/' + location for location in ('lib', 'lib64')]
+includes_directories = ['RapidCheck/include']
+libs_directories = ['RapidCheckBuild']
 
 property_test = cpp_environment.Program('string_trim_property_tests.cpp',
                                         CPPPATH=includes_directories,

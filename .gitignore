@@ -16,3 +16,4 @@ __pycache__/
 *.pyc
 string_trim_property_tests
 string_trim_property_tests.o
+/RapidCheckBuild/
