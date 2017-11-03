@@ -1,39 +1,17 @@
-.PHONY: test doc clean
+all: doc src
 
-CXX=g++-7
-EXTRACXXFLAGS=
-CXXFLAGS=-std=c++1z -g $(EXTRACXXFLAGS)
-LATEXCOMMAND=xelatex
-LATEXFLAGS=-file-line-error -halt-on-error 
+doc:
+	cd doc && make
 
-TESTROOT=string_trim_tests
-DOCROOT=proposal
-HEADER=string_trim.hpp
+src:
+	cd src && make
 
-all: test doc
+clean: clean-doc clean-src
 
-test: $(TESTROOT)
-	./$(TESTROOT)
+clean-doc:
+	cd doc && make clean
 
-$(TESTROOT): $(TESTROOT).cpp $(HEADER) makefile
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ $<
+clean-src:
+	cd src && make clean
 
-doc: $(DOCROOT).pdf makefile
-
-$(DOCROOT).pdf: $(DOCROOT).ltx
-	$(LATEXCOMMAND) $(LATEXFLAGS) $<
-	biber $(DOCROOT)
-	$(LATEXCOMMAND) $(LATEXFLAGS) $<
-	$(LATEXCOMMAND) $(LATEXFLAGS) $<
-
-clean:
-	rm -f $(TESTROOT)
-	rm -f $(DOCROOT).aux
-	rm -f $(DOCROOT).bbl
-	rm -f $(DOCROOT).bcf
-	rm -f $(DOCROOT).blg
-	rm -f $(DOCROOT).log
-	rm -f $(DOCROOT).out
-	rm -f $(DOCROOT).pdf
-	rm -f $(DOCROOT).run.xml
-	rm -f $(DOCROOT).toc
+.PHONY: all doc src clean clean-doc clean-src

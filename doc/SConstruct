@@ -1,0 +1,6 @@
+
+environment = Environment(
+    tools=['xetex'],
+)
+
+environment.XELATEX('proposal')

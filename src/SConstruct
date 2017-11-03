@@ -1,0 +1,42 @@
+from __future__ import print_function
+
+import os
+
+cxx_flags = ['-std=c++17', '-g']
+
+if 'CXX' in os.environ:
+    if os.environ['CXX'].startswith('clang++'):
+        environment = Environment(
+            tools=['clangxx', 'link'],
+            CXX=os.environ['CXX'],
+            CXXFLAGS=cxx_flags,
+        )
+    else:
+        environment = Environment(
+            tools=['g++', 'gnulink'],
+            CXX=os.environ['CXX'],
+            CXXFLAGS=cxx_flags,
+        )
+else:
+    environment = Environment(
+        tools=['c++', 'link'],
+        CXXFLAGS=cxx_flags,
+    )
+
+# With g++ can add -fconcepts to get concepts. Clang does not support concepts.
+if 'EXTRACXXFLAGS' in os.environ:
+    environment.Append(CXXFLAGS=os.environ['EXTRACXXFLAGS'])
+
+test = environment.Program('string_trim_tests.cpp')
+
+includes_directories = ['../RapidCheck/include']
+libs_directories = ['../RapidCheckBuild']
+
+property_test = environment.Program('string_trim_property_tests.cpp',
+                                CPPPATH=includes_directories,
+                                LINKFLAGS=['-L' + location for location in libs_directories],
+                                LIBS='rapidcheck',
+)
+
+Command('test', test, './$SOURCE')
+Command('property_test', property_test, './$SOURCE')

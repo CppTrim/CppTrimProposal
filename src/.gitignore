@@ -1,0 +1,4 @@
+string_trim_tests
+string_trim_tests.o
+string_trim_property_tests
+string_trim_property_tests.o
