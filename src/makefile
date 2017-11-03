@@ -20,4 +20,6 @@ $(TESTPROPERTYROOT): $(TESTPROPERTYROOT).cpp $(HEADER) makefile
 
 clean:
 	@rm -f $(TESTROOT)
+	@rm -f $(TESTROOT).o
 	@rm -f $(TESTPROPERTYROOT)
+	@rm -f $(TESTPROPERTYROOT).o
