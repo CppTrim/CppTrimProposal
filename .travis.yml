@@ -33,7 +33,8 @@ matrix:
 
 
 before_install:
-  - sudo aptitude install texlive-xelatex
+  - sudo aptitude -q update
+  - sudo aptitude install -y texlive-xetex
   - wget http://prdownloads.sourceforge.net/scons/scons-3.0.0.tar.gz
   - tar -xzvf scons-3.0.0.tar.gz
   - chmod a+x $PWD/scons-3.0.0/script/scons
