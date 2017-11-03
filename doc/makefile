@@ -23,3 +23,4 @@ clean:
 	@rm -f $(DOCROOT).pdf
 	@rm -f $(DOCROOT).run.xml
 	@rm -f $(DOCROOT).toc
+	@rm -f $(DOCROOT).fls
