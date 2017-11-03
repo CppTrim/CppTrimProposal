@@ -44,4 +44,5 @@ before_script:
   - pushd RapidCheckBuild && cmake ../RapidCheck && make && popd
 
 script:
-  - scons test property_test
+  - pushd src && scons && popd
+  - pushd doc && scons && popd
