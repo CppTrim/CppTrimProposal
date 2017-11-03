@@ -8,7 +8,7 @@ standard library.
 
 ## Getting Involved
 
-The usual GitHub approach is (faily obviously?) the way to go. Clone this repository within GitHub and then
+The usual GitHub approach is (fairly obviously?) the way to go. Clone this repository within GitHub and then
 from there clone to your local machine. However a little more is needed. You may want to install Python 3
 and [SCons](http://scons.org/) 3 for builds, though there is a Make set up. However a little more is needed…
 
