@@ -3,8 +3,8 @@
 
 # C++ Trim
 
-This repository is for work by various people to create a proposal for a set of trim functions for the C++
-standard library.
+This repository is for work by various people to create a proposal for a (set of) trim function(s) for the C++
+standard library. This repository has the working document and a reference implementation.
 
 ## Getting Involved
 
@@ -25,12 +25,41 @@ cmake ../RapidCheck
 make
 popd
 ```
-This creates the RapidCheck library file needed for linking. With all this done:
+This creates the RapidCheck library file needed for linking. With all this done, you can then go on to run
+the tests:
 ```
+cd src
 scons test property-test
 ```
 should run the two tests which should pass. SCons 3 running on Python 3 is strongly recommended, in fact
-this is the only combination known to work, no other has been tried.
+this is the only combination known to work, no other has been tried. For those not interested in using
+SCons:
+```
+cd src
+make
+```
+
+There is also the document that is the formal proposal – still in very early stages. This is a LaTeX document
+built using XeLaTeX. The Debian (and hence Ubuntu) packages requires are:
+
+* texlive-xetex
+* texlive-latex-recommended
+* texlive-latex-extra
+* texlive-fonts-recommended
+* texlive-bibtex-extra
+
+Other distributions and OSes will have different package structures, or may not use TeX Live. In dire straights installing the full
+TeX Live system has to work. With these TeX Live bits installed then from the project root:
+```
+cd doc
+scons
+```
+or for those not interested in using SCons:
+```
+cd doc
+make
+```
+You should now have proposal.pdf.
 
 ## LICENCE
 
