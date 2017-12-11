@@ -8,3 +8,5 @@
 *.out
 *.run.xml
 *.toc
+.sconsign.dblite
+__pycache__/
